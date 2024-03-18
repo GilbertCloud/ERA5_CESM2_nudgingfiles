@@ -11,7 +11,7 @@ variable = [
     'specific_humidity'
 ]
 
-year = [str(i) for i in range(1950,2024)] 
+year = ['1951'] 
 
 day = [
     '01', '02', '03',
