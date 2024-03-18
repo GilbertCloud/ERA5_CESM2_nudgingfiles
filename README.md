@@ -8,18 +8,18 @@ Contact Ash (ash.gilbert@colorado.edu) with any questions.
 ## Workflow for processing data
 1) Download hourly ERA5 data into scratch
 
-  qsub download_job.sh
+   qsub download_job.sh
 
-3) Regrid horizontially (0.9°x0.9°) and vertically (32 levels)
+2) Regrid horizontially (0.9°x0.9°) and vertically (32 levels)
 
    qsub regridoriginal_job.sh
 
-5) Split single files with 24 hours of data into 4 6-hourly files
+3) Split single files with 24 hours of data into 4 6-hourly files
 
    module load matlab; matlab
    run scratch.io
 
-7) Sanity check
+4) Sanity check
 
    python3 sanity_check_files.py
 
