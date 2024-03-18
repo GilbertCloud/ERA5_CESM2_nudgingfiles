@@ -7,11 +7,15 @@ from tqdm.contrib.concurrent import thread_map
 
 c = cdsapi.Client(timeout=60,quiet=False,debug=True)
 
+# variable = [
+#     'v_component_of_wind',
+#     'u_component_of_wind',
+#     'temperature',
+#     'specific_humidity'
+# ]
+
 variable = [
-    'v_component_of_wind',
-    'u_component_of_wind',
-    'temperature',
-    'specific_humidity'
+    'v_component_of_wind'
 ]
 
 year = [str(i) for i in range(1950,1951)] 
@@ -30,18 +34,20 @@ year = [str(i) for i in range(1950,1951)]
 #     '31'
 # ]
 
-day = [
-    '05', '06',
-    '07', '08', '09',
-    '10', '11', '12',
-    '13', '14', '15',
-    '16', '17', '18',
-    '19', '20', '21',
-    '22', '23', '24',
-    '25', '26', '27',
-    '28', '29', '30',
-    '31'
-]
+day = ['04']
+
+# day = [
+#     '05', '06',
+#     '07', '08', '09',
+#     '10', '11', '12',
+#     '13', '14', '15',
+#     '16', '17', '18',
+#     '19', '20', '21',
+#     '22', '23', '24',
+#     '25', '26', '27',
+#     '28', '29', '30',
+#     '31'
+# ]
 
 time = [
     '00:00', '01:00', '02:00',
@@ -54,8 +60,7 @@ time = [
     '21:00', '22:00', '23:00',
 ]
 
-#month = [str(i).zfill(2) for i in range(1,13)]
-month = ['12']
+month = [str(i).zfill(2) for i in range(1,13)]
 
 SAVE_PATH = '/glade/derecho/scratch/glydia/inputdata/nudging/ERA5original/'
 
