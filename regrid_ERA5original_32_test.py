@@ -91,10 +91,10 @@ def interpolate_data(cvar, cday, cmonth, cyr):
     os.system("rm -f temp.nc")
 
 def main():
-    for cvariable in variable:
-        for cyr in year:
+    for cyr in year:
+        for cmonth in month:
             for cday in day:
-                for cmonth in month:
+                for cvariable in variable:
                     # Try to do download data, catch error if it fails
                     try:
                         interpolate_data(cvariable, cday, cmonth, cyr)
