@@ -8,8 +8,7 @@ variable = [
     'v_component_of_wind',
     'u_component_of_wind',
     'temperature',
-    'specific_humidity',
-    'surface_pressure'
+    'specific_humidity'
 ]
 
 year = ['1951'] 
@@ -45,38 +44,25 @@ var_aliases = {
     'u_component_of_wind':'131_u',
     'v_component_of_wind':'132_v',
     'temperature':'130_t',
-    'specific_humidity':'133_q',
-    'surface_pressure':'134_sp'
+    'specific_humidity':'133_q'
 }
 
 levs = {
     'u_component_of_wind':'ll025uv',
     'v_component_of_wind':'ll025uv',
     'temperature':'ll025sc',
-    'specific_humidity':'ll025sc',
-    'surface_pressure':'ll025sc'
-}
-
-types = {
-    'u_component_of_wind':'pl',
-    'v_component_of_wind':'pl',
-    'temperature':'pl',
-    'specific_humidity':'pl',
-    'surface_pressure':'sfc'
+    'specific_humidity':'ll025sc'
 }
 
 
-DATA_PATH = '/glade/campaign/collections/rda/data/ds633.0/e5.oper.an.'
+DATA_PATH = '/glade/campaign/collections/rda/data/ds633.0/e5.oper.an.pl'
 
 def interpolate_data(cvar, cday, cmonth, cyr):
     # Set variables and paths
     var_alias = var_aliases[cvar]
     lev = levs[cvar]
-    typ = types[cvar]
 
-    DATA_I_PATH = DATA_PATH+typ
-
-    cfile = os.path.join(DATA_I_PATH, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
+    cfile = os.path.join(DATA_PATH, f'{cyr}{cmonth}',f'e5.oper.an.pl.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
 
     # command1 = f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc"
     # print(command1)

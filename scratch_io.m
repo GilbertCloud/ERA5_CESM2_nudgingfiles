@@ -13,20 +13,17 @@ for year=1950:2023
                 fname2=(['ERA5regrid/e5.oper.an.pl.128_132_v.regrid.' num2str(year) '0' num2str(mo) 'day' num2str( iday) '.nc']);
                 fname3=(['ERA5regrid/e5.oper.an.pl.128_130_t.regrid.' num2str(year) '0' num2str(mo) 'day' num2str( iday) '.nc']);
                 fname4=(['ERA5regrid/e5.oper.an.pl.128_133_q.regrid.' num2str(year) '0' num2str(mo) 'day' num2str( iday) '.nc']);
-                fname5=(['ERA5regrid/e5.oper.an.sfc.128_134_sp.regrid.' num2str(year) '0' num2str(mo) 'day' num2str( iday) '.nc']);
             else
                 fname=(['ERA5regrid/e5.oper.an.pl.128_131_u.regrid.' num2str(year) '' num2str(mo) 'day' num2str( iday) '.nc']);
                 fname2=(['ERA5regrid/e5.oper.an.pl.128_132_v.regrid.' num2str(year) '' num2str(mo) 'day' num2str( iday) '.nc']);
                 fname3=(['ERA5regrid/e5.oper.an.pl.128_130_t.regrid.' num2str(year) '' num2str(mo) 'day' num2str( iday) '.nc']);
                 fname4=(['ERA5regrid/e5.oper.an.pl.128_133_q.regrid.' num2str(year) '' num2str(mo) 'day' num2str( iday) '.nc']);
-                fname5=(['ERA5regrid/e5.oper.an.sfc.128_134_sp.regrid.' num2str(year) '' num2str(mo) 'day' num2str( iday) '.nc']);
             end
 
             dum=ncread(fname,'u'); %,[1 1 1 1],[inf inf inf inf],[1 1 1 2]); 
             dum2=ncread(fname2,'v'); %,[1 1 1 1],[inf inf inf inf],[1 1 1 2]); 
             dum3=ncread(fname3,'t'); %,[1 1 1 1],[inf inf inf inf],[1 1 1 2]); 
             dum4=ncread(fname4,'q'); %,[1 1 1 1],[inf inf inf inf],[1 1 1 2]); 
-            dum5=ncread(fname5,'ps'); %,[1 1 1 1],[inf inf inf inf],[1 1 1 2]); 
 
             lat=ncread(fname,'lat');
             lon=ncread(fname,'lon');
@@ -59,15 +56,15 @@ for year=1950:2023
 
                 if imo<10
                     if iday<10
-                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtqps.' num2str(nyr) '-0' num2str(imo) '-0' num2str(iday) '-' char(hours(hr)) '.nc']
+                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtq.' num2str(nyr) '-0' num2str(imo) '-0' num2str(iday) '-' char(hours(hr)) '.nc']
                     else
-                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtqps.' num2str(nyr) '-0' num2str(imo) '-' num2str(iday) '-' char(hours(hr)) '.nc']
+                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtq.' num2str(nyr) '-0' num2str(imo) '-' num2str(iday) '-' char(hours(hr)) '.nc']
                     end
                 else
                     if iday<10
-                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtqps.' num2str(nyr) '-' num2str(imo) '-0' num2str(iday) '-' char(hours(hr)) '.nc']
+                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtq.' num2str(nyr) '-' num2str(imo) '-0' num2str(iday) '-' char(hours(hr)) '.nc']
                     else
-                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtqps.' num2str(nyr) '-' num2str(imo) '-' num2str(iday) '-' char(hours(hr)) '.nc']
+                        name_ou=['ERA5_CESM2/ERA5.6hour.32level.uvtq.' num2str(nyr) '-' num2str(imo) '-' num2str(iday) '-' char(hours(hr)) '.nc']
                     end
                 end
 
@@ -92,9 +89,7 @@ for year=1950:2023
                 ncwriteatt(name_ou,'Q','units','kg/kg')
 
                 nccreate(name_ou,'PS','Dimensions',{'lon',288,'lat',192,'time',1},'Format','classic')
-                ncwrite(name_ou,'PS',permute(dum5(:,:,it),[1 2 3]))
-                ncwriteatt(name_ou,'PS','long_name','Surface pressure')
-                ncwriteatt(name_ou,'PS','units','Pa')
+                ncwrite(name_ou,'PS',zmask)
 
                 nccreate(name_ou,'lat','Dimensions',{'lat',192},'Format','classic') 
                 ncwrite(name_ou,'lat',lat)
