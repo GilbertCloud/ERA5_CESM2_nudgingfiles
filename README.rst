@@ -34,3 +34,4 @@ Notes:
 * 1 file containing 1 day's worth of data for 1 variable is 163 MB (After regridding in step 1)
 * 1 year's worth of data for all four variables (U,V,T,Q) is 0.26 TB
 * Recommended that only process 10 years of data at a time
+* DO NOT run more than one regridoriginal_job at a time because it uses a temp variable
