@@ -43,6 +43,7 @@ def split_files(cyr,cmonth,cday):
     vfile = os.path.join(DATA_PATH,'ERA5regrid',f'e5.oper.an.pl.128_132_v.regrid.{cyr}{cmonth}day{int(cday)}.nc')
     tfile = os.path.join(DATA_PATH,'ERA5regrid',f'e5.oper.an.pl.128_130_t.regrid.{cyr}{cmonth}day{int(cday)}.nc')
     qfile = os.path.join(DATA_PATH,'ERA5regrid',f'e5.oper.an.pl.128_133_q.regrid.{cyr}{cmonth}day{int(cday)}.nc')
+    pfile = os.path.join(DATA_PATH,'ERA5regrid',f'e5.oper.an.sfc.128_134_sp.regrid.{cyr}{cmonth}.nc')
 
     # Check to make sure input files exist
     if not os.path.isfile(ufile):
@@ -61,14 +62,27 @@ def split_files(cyr,cmonth,cday):
         print(qfile, 'does not exist')
         return False
     
+    if not os.path.isfile(pfile):
+        print(pfile, 'does not exist')
+        return False
+    
     # Open datasets
     du = xr.open_dataset(ufile).load()
     dv = xr.open_dataset(vfile).load()
     dt = xr.open_dataset(tfile).load()
     dq = xr.open_dataset(qfile).load()
+    dp = xr.open_dataset(pfile).load()
+
+    # Rename attributes
+    du['U'].attrs['long_name'] = 'Zonal wind'
+    dv['V'].attrs['long_name'] = 'Meridional wind'
+    dp = dp.rename({'SP':'PS'})
+    dp['PS'].attrs['short_name'] = 'ps'
 
     # Merge datasets
     ds = xr.merge([du,dv,dt,dq])
+    ds = ds.rename({'level':'lev'})
+    ds['PS'] = dp['PS'].sel(time=f'{cyr}-{cmonth}-{cday}')
     ds.compute()
 
     # Loop through all four times
@@ -91,9 +105,6 @@ def split_files(cyr,cmonth,cday):
 
             dstime = ds[index]
             dstime.compute()
-
-            # Add PS of zeros
-            dstime['PS'] = xr.zeros_like(dstime['U'][dict(lev=0)])
 
             dstime.to_netcdf(outpath)
             dstime.close()
