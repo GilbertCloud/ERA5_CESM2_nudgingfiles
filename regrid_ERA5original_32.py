@@ -79,6 +79,10 @@ def interpolate_data(cvar, cday, cmonth, cyr):
 
     cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
 
+    if os.path.isfile(cfile):
+        print(cfile,' already exists')
+        return
+
     # command1 = f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc"
     # print(command1)
     # os.system(command1)
@@ -106,6 +110,10 @@ def interpolate_ps(cvar, cmonth, cyr):
         day_end += 1
 
     cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}0100_{cyr}{cmonth}{str(day_end)}23.nc')
+
+    if os.path.isfile(cfile):
+        print(cfile,' already exists')
+        return
 
     # command1 = f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc"
     # print(command1)
