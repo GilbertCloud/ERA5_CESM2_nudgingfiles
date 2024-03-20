@@ -56,16 +56,7 @@ levs = {
     'surface_pressure':'ll025sc'
 }
 
-types = {
-    'u_component_of_wind':'pl',
-    'v_component_of_wind':'pl',
-    'temperature':'pl',
-    'specific_humidity':'pl',
-    'surface_pressure':'sfc'
-}
-
 days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
 
 DATA_PATH = '/glade/campaign/collections/rda/data/ds633.0/e5.oper.an.'
 SAVE_PATH = '/glade/derecho/scratch/glydia/inputdata/nudging/ERA5regrid'
@@ -74,12 +65,11 @@ def interpolate_data(cvar, cday, cmonth, cyr):
     # Set variables and paths
     var_alias = var_aliases[cvar]
     lev = levs[cvar]
-    typ = types[cvar]
 
-    DATA_PATH_I = DATA_PATH+typ
+    DATA_PATH_I = DATA_PATH+'pl'
 
-    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
-    ofile = os.path.join(SAVE_PATH,f'e5.oper.an.{typ}.128_{var_alias}.regrid.{cyr}{cmonth}day{int(cday)}.nc')
+    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.pl.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
+    ofile = os.path.join(SAVE_PATH,f'e5.oper.an.pl.128_{var_alias}.regrid.{cyr}{cmonth}day{int(cday)}.nc')
 
     if os.path.isfile(ofile):
         print(ofile,' already exists')
@@ -102,17 +92,16 @@ def interpolate_ps(cvar, cmonth, cyr):
      # Set variables and paths
     var_alias = var_aliases[cvar]
     lev = levs[cvar]
-    typ = types[cvar]
     mon = int(cmonth)
     day_end = days_in_month[mon-1]
 
-    DATA_PATH_I = DATA_PATH+typ
+    DATA_PATH_I = DATA_PATH+'sfc'
 
     if mon == 2 and (int(cyr) % 4) == 0:
         day_end += 1
 
-    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}0100_{cyr}{cmonth}{str(day_end)}23.nc')
-    ofile = os.path.join(SAVE_PATH,f'e5.oper.an.{typ}.128_{var_alias}.regrid.{cyr}{cmonth}.nc')
+    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.sfc.128_{var_alias}.{lev}.{cyr}{cmonth}0100_{cyr}{cmonth}{str(day_end)}23.nc')
+    ofile = os.path.join(SAVE_PATH,f'e5.oper.an.sfc.128_{var_alias}.regrid.{cyr}{cmonth}.nc')
 
     if os.path.isfile(ofile):
         print(ofile,' already exists')
@@ -146,8 +135,8 @@ def main():
             try:
                 interpolate_ps('surface_pressure',cmonth,cyr)
             except Exception as e:
-                        print(e)
-                        print(f'Download failed for surface_pressure {cmonth} {cyr}')
+                print(e)
+                print(f'Download failed for surface_pressure {cmonth} {cyr}')
 
 if __name__ == '__main__':
    main()
