@@ -44,25 +44,40 @@ var_aliases = {
     'u_component_of_wind':'131_u',
     'v_component_of_wind':'132_v',
     'temperature':'130_t',
-    'specific_humidity':'133_q'
+    'specific_humidity':'133_q',
+    'surface_pressure':'134_sp'
 }
 
 levs = {
     'u_component_of_wind':'ll025uv',
     'v_component_of_wind':'ll025uv',
     'temperature':'ll025sc',
-    'specific_humidity':'ll025sc'
+    'specific_humidity':'ll025sc',
+    'surface_pressure':'ll025sc'
 }
 
+types = {
+    'u_component_of_wind':'pl',
+    'v_component_of_wind':'pl',
+    'temperature':'pl',
+    'specific_humidity':'pl',
+    'surface_pressure':'sfc'
+}
 
-DATA_PATH = '/glade/campaign/collections/rda/data/ds633.0/e5.oper.an.pl'
+days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+
+DATA_PATH = '/glade/campaign/collections/rda/data/ds633.0/e5.oper.an.'
 
 def interpolate_data(cvar, cday, cmonth, cyr):
     # Set variables and paths
     var_alias = var_aliases[cvar]
     lev = levs[cvar]
+    typ = types[cvar]
 
-    cfile = os.path.join(DATA_PATH, f'{cyr}{cmonth}',f'e5.oper.an.pl.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
+    DATA_PATH_I = DATA_PATH+typ
+
+    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}{cday}00_{cyr}{cmonth}{cday}23.nc')
 
     # command1 = f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc"
     # print(command1)
@@ -73,7 +88,35 @@ def interpolate_data(cvar, cday, cmonth, cyr):
     # os.system("rm -f temp.nc")
 
     os.system(f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc")
-    os.system(f"cdo intlevel,3.64346569404006,7.59481964632869,14.3566322512925,24.6122200042009,35.9232500195503,43.1937500834465,51.6774989664555,61.5204982459545,73.7509578466415,87.8212302923203,103.317126631737,121.547240763903,142.994038760662,168.225079774857,197.908086702228,232.828618958592,273.910816758871,322.241902351379,379.100903868675,445.992574095726,524.687174707651,609.778694808483,691.389430314302,763.404481112957,820.858368650079,859.53476652503,887.020248919725,912.644546944648,936.198398470879,957.485479535535,976.325407391414,992.556095123291 temp.nc ERA5regrid/e5.oper.an.pl.128_{var_alias}.regrid.{cyr}{cmonth}day{int(cday)}.nc")
+    os.system(f"cdo intlevel,3.64346569404006,7.59481964632869,14.3566322512925,24.6122200042009,35.9232500195503,43.1937500834465,51.6774989664555,61.5204982459545,73.7509578466415,87.8212302923203,103.317126631737,121.547240763903,142.994038760662,168.225079774857,197.908086702228,232.828618958592,273.910816758871,322.241902351379,379.100903868675,445.992574095726,524.687174707651,609.778694808483,691.389430314302,763.404481112957,820.858368650079,859.53476652503,887.020248919725,912.644546944648,936.198398470879,957.485479535535,976.325407391414,992.556095123291 temp.nc ERA5regrid/e5.oper.an.{typ}.128_{var_alias}.regrid.{cyr}{cmonth}day{int(cday)}.nc")
+    os.system("rm -f temp.nc")
+
+
+def interpolate_ps(cvar, cmonth, cyr):
+     # Set variables and paths
+    var_alias = var_aliases[cvar]
+    lev = levs[cvar]
+    typ = types[cvar]
+    mon = int(cmonth)
+    day_end = days_in_month[mon-1]
+
+    DATA_PATH_I = DATA_PATH+typ
+
+    if mon == 2 and (int(cyr) % 4) == 0:
+        day_end += 1
+
+    cfile = os.path.join(DATA_PATH_I, f'{cyr}{cmonth}',f'e5.oper.an.{typ}.128_{var_alias}.{lev}.{cyr}{cmonth}0100_{cyr}{cmonth}{str(day_end)}23.nc')
+
+    # command1 = f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc"
+    # print(command1)
+    # os.system(command1)
+    # command2 = f"cdo intlevel,3.64346569404006,7.59481964632869,14.3566322512925,24.6122200042009,38.2682997733355,54.5954797416925,72.0124505460262,87.8212302923203,103.317126631737,121.547240763903,142.994038760662,168.225079774857,197.908086702228,232.828618958592,273.910816758871,322.241902351379,379.100903868675,445.992574095726,524.687174707651,609.778694808483,691.389430314302,763.404481112957,820.858368650079,859.53476652503,887.020248919725,912.644546944648,936.198398470879,957.485479535535,976.325407391414,992.556095123291 temp.nc ERA5regrid/e5.oper.an.pl.128_{var_alias}.regrid.{cyr}{cmonth}day{int(cday)}.nc"
+    # print(command2)
+    # os.system(command2)
+    # os.system("rm -f temp.nc")
+
+    os.system(f"cdo -f nc4 -remapbil,cdo_grid.txt -setgridtype,regular {cfile} temp.nc")
+    os.system(f"cdo intlevel,3.64346569404006,7.59481964632869,14.3566322512925,24.6122200042009,35.9232500195503,43.1937500834465,51.6774989664555,61.5204982459545,73.7509578466415,87.8212302923203,103.317126631737,121.547240763903,142.994038760662,168.225079774857,197.908086702228,232.828618958592,273.910816758871,322.241902351379,379.100903868675,445.992574095726,524.687174707651,609.778694808483,691.389430314302,763.404481112957,820.858368650079,859.53476652503,887.020248919725,912.644546944648,936.198398470879,957.485479535535,976.325407391414,992.556095123291 temp.nc ERA5regrid/e5.oper.an.{typ}.128_{var_alias}.regrid.{cyr}{cmonth}.nc")
     os.system("rm -f temp.nc")
 
 def main():
@@ -87,9 +130,12 @@ def main():
                     except Exception as e:
                         print(e)
                         print(f'Download failed for {cvariable} {cday} {cmonth} {cyr}')
-    #                break
-    #            break
-    #        break
+
+            try:
+                interpolate_ps('surface_pressure',cmonth,cyr)
+            except Exception as e:
+                        print(e)
+                        print(f'Download failed for surface_pressure {cmonth} {cyr}')
 
 if __name__ == '__main__':
    main()
