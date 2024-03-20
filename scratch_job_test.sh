@@ -6,7 +6,7 @@
 #PBS -l select=1:ncpus=8:mpiprocs=1
 #PBS -M glydia@ucar.edu
 
-module load matlab
-matlab
+module load conda
+conda activate cenv
 
-run scratch_test.io
+python3 /glade/derecho/scratch/glydia/inputdata/nudging/scratch_io_test.py
