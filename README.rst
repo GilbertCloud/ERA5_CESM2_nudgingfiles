@@ -17,11 +17,12 @@ Workflow for processing data
 
    * Script runs regrid_ERA5original_32.py
 
-#. Split single files with 24 hours of data into 4 6-hourly file\
+#. Split single files with 24 hours of data into 4 6-hourly file
    ::
 
-      module load matlab; matlab
-      run scratch.io
+      qsub scratch_job.sh
+
+   * Script runs scratch_io.py
 
 #. Sanity check all CESM2 files
    ::
@@ -32,4 +33,4 @@ Notes:
 ***********
 * 1 file containing 1 day's worth of data for 1 variable is 163 MB (After regridding in step 1)
 * 1 year's worth of data for all four variables (U,V,T,Q) is 0.26 TB
-* Recommended that only process 5 years of data at a time
+* Recommended that only process 10 years of data at a time
