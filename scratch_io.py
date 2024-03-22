@@ -3,7 +3,7 @@ import numpy as np
 import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
-year = ['1952','1953'] 
+year = ['1954','1955','1956','1957'] 
 
 day = [
     '01', '02', '03',
