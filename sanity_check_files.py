@@ -55,7 +55,7 @@ def _sanity_check(arg):
             dtime = ds.time
 
             # Check has all variables
-            if DATA_VARS.issubset(set(ds.data_vars.keys())):
+            if not DATA_VARS.issubset(set(ds.data_vars.keys())):
                 return True, outFile, 'not all variables'
             # Check number of levels
             if ds.dims['lev'] != 32:
