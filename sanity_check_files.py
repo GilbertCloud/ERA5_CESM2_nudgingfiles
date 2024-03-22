@@ -5,7 +5,7 @@ import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
 #years = list(np.arange(1950, 1980))
-years = list(np.arange(1950, 1952))
+years = list(np.arange(1950, 1954))
 
 day = [
     '01', '02', '03',
@@ -60,6 +60,12 @@ def _sanity_check(arg):
             # Check number of levels
             if ds.dims['lev'] != 32:
                 return True, outFile, 'number of levels wrong'
+            # Check number of lats
+            if ds.dims['lat'] != 192:
+                return True, outFile, 'number of lats wrong'
+            # Check number of levels
+            if ds.dims['lon'] != 288:
+                return True, outFile, 'number of lons wrong'
             # Check that file name matches internal date
             if dtime.dt.year.values != int(cyr):
                 return True, outFile, 'internal year wrong'
