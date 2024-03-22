@@ -5,7 +5,7 @@ import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
 #years = list(np.arange(1950, 1980))
-years = list(np.arange(1950, 1954))
+years = list(np.arange(1954, 1958))
 
 day = [
     '01', '02', '03',
@@ -54,29 +54,46 @@ def _sanity_check(arg):
 
             dtime = ds.time
 
+            # Checks for all possible problems will file and saves all problems
+            # If encounters at least one error, sets file as bad (return True)
+            file_probs = []
+            prob_encountered = False
+
             # Check has all variables
             if not DATA_VARS.issubset(set(ds.data_vars.keys())):
-                return True, outFile, 'not all variables'
+                file_probs.append('not all variables')
+                prob_encountered = True
             # Check number of levels
             if ds.dims['lev'] != nlev:
-                return True, outFile, 'number of levels wrong'
+                file_probs.append('number of levels wrong')
+                prob_encountered = True
             # Check number of lats
             if ds.dims['lat'] != nlat:
-                return True, outFile, 'number of lats wrong'
+                file_probs.append('number of lats wrong')
+                prob_encountered = True
             # Check number of lons
             if ds.dims['lon'] != nlon:
-                return True, outFile, 'number of lons wrong'
-            # Check that file name matches internal date
+                file_probs.append('number of lons wrong')
+                prob_encountered = True
+            # Check that file name date matches internal year
             if dtime.dt.year.values != int(cyr):
-                return True, outFile, 'internal year wrong'
+                file_probs.append('internal year wrong')
+                prob_encountered = True
+            # Check that file name date matches internal month
             if dtime.dt.month.values != int(cmonth):
-                return True, outFile, 'internal month wrong'
+                file_probs.append('internal month wrong')
+                prob_encountered = True
+            # Check that file name date matches internal day
             if dtime.dt.day.values != int(cday):
-                return True, outFile, 'internal day wrong'
+                file_probs.append('internal day wrong')
+                prob_encountered = True
+            # Check that file name date matches internal hour
             if dtime.dt.hour.values*hoursec != int(ctime):
-                return True, outFile, 'internal hour wrong'
+                file_probs.append('internal hour wrong')
+                prob_encountered = True
 
-            return False, outFile, 'good'
+            # If no problems encountered, returns prob_encountered=False & empty list of file problems
+            return prob_encountered, outFile, file_probs
 
         except:
             return True, outFile, 'error'
