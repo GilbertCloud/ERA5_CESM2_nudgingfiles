@@ -35,7 +35,7 @@ month = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 #month = ['10', '11', '12']
 
 DATA_VARS = set(['V', 'T', 'U', 'PS', 'Q'])
-SAVE_PATH = '/glade/derecho/scratch/glydia/inputdata/nudging/ERA5_CESM2/'
+SAVE_PATH = '/glade/campaign/univ/ucub0137/ERA5_CESM2_nudging'
 
 nlat = 192
 nlon =288
@@ -58,13 +58,13 @@ def _sanity_check(arg):
             if not DATA_VARS.issubset(set(ds.data_vars.keys())):
                 return True, outFile, 'not all variables'
             # Check number of levels
-            if ds.dims['lev'] != 32:
+            if ds.dims['lev'] != nlev:
                 return True, outFile, 'number of levels wrong'
             # Check number of lats
-            if ds.dims['lat'] != 192:
+            if ds.dims['lat'] != nlat:
                 return True, outFile, 'number of lats wrong'
-            # Check number of levels
-            if ds.dims['lon'] != 288:
+            # Check number of lons
+            if ds.dims['lon'] != nlon:
                 return True, outFile, 'number of lons wrong'
             # Check that file name matches internal date
             if dtime.dt.year.values != int(cyr):
