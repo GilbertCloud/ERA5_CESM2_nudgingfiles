@@ -11,7 +11,7 @@ variable = [
     'specific_humidity'
 ]
 
-year = ['1952'] 
+year = ['1955'] 
 
 day = [
     '01', '02', '03',
