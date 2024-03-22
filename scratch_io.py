@@ -36,6 +36,7 @@ timein = [
 ]
 
 DATA_PATH = '/glade/derecho/scratch/glydia/inputdata/nudging/'
+SAVE_PATH = '/glade/campaign/univ/ucub0137/ERA5_CESM2_nudging'
 
 def split_files(cyr,cmonth,cday):
     # Set input data file paths
@@ -88,7 +89,7 @@ def split_files(cyr,cmonth,cday):
 
         # Set outfile path
         outfile = f'ERA5.6hour.32level.uvtq.{cyr}-{cmonth}-{cday}-{ctime}.nc'
-        outpath = os.path.join(DATA_PATH,'ERA5_CESM2',outfile)
+        outpath = os.path.join(SAVE_PATH,outfile)
 
         try:
             # Check if exists
