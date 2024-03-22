@@ -5,7 +5,7 @@ import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
 #years = list(np.arange(1950, 1980))
-years = list(np.arange(1950, 1951))
+years = list(np.arange(1950, 1952))
 
 day = [
     '01', '02', '03',
@@ -28,6 +28,7 @@ time = [
     '64800',
 ]
 
+hoursec = 3600
 
 month = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 #month = ['10', '11', '12']
@@ -48,14 +49,26 @@ def _sanity_check(arg):
 
     if os.path.isfile(fullPath):
         try:
-            ds = xr.open_dataset(fullPath, decode_cf=False)
+            ds = xr.open_dataset(fullPath)
+            
+            dtime = ds.time
 
-            # Check has all variables
-            if DATA_VARS != set(ds.data_vars.keys()):
+            # Check has all variables (use subset because utc_date is part of file)
+            if DATA_VARS.issubset(set(ds.data_vars.keys())):
                 return True, outFile
             # Check number of levels
             if ds.dims['lev'] != 32:
                 return True, outFile
+            # Check that file name matches internal date
+            if dtime.dt.year.values != int(cyr):
+                return True, outFile
+            if dtime.dt.month.values != int(cmonth):
+                return True, outFile
+            if dtime.dt.day.values != int(cday):
+                return True, outFile
+            if dtime.dt.hour.values*hoursec != int(ctime):
+                return True, outFile
+
 
             return False, outFile
 
