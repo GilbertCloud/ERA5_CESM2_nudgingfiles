@@ -53,29 +53,28 @@ def _sanity_check(arg):
             
             dtime = ds.time
 
-            # Check has all variables (use subset because utc_date is part of file)
-            if DATA_VARS.issubset(set(ds.data_vars.keys())):
-                return True, outFile
+             # Check has all variables
+            if not DATA_VARS.issubset(set(ds.data_vars.keys())):
+                return True, outFile, 'not all variables'
             # Check number of levels
             if ds.dims['lev'] != 32:
-                return True, outFile
+                return True, outFile, 'number of levels wrong'
             # Check that file name matches internal date
             if dtime.dt.year.values != int(cyr):
-                return True, outFile
+                return True, outFile, 'internal year wrong'
             if dtime.dt.month.values != int(cmonth):
-                return True, outFile
+                return True, outFile, 'internal month wrong'
             if dtime.dt.day.values != int(cday):
-                return True, outFile
+                return True, outFile, 'internal day wrong'
             if dtime.dt.hour.values*hoursec != int(ctime):
-                return True, outFile
+                return True, outFile, 'internal hour wrong'
 
-
-            return False, outFile
+            return False, outFile, 'good'
 
         except:
-            return True, outFile
+            return True, outFile, 'error'
 
-    return False, outFile
+    return False, outFile,'good'
 
 
 
@@ -96,11 +95,11 @@ def main():
                     #for bad_file in s:
                     # bad, fn = _sanity_check((ctime, cday, cmonth, cyr))
                     #cyr, cmonth, cday, ctime = bad_file.split(".")[-2].split("-")
-                    bad, fn = _sanity_check((ctime, cday, cmonth, cyr))
+                    bad, fn, why = _sanity_check((ctime, cday, cmonth, cyr))
                     #print(bad, fn)
 
                     if bad:
-                        bad_files.append(fn)
+                        bad_files.append((fn,why))
                     #return
 
 
