@@ -5,7 +5,7 @@ import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
 #years = list(np.arange(1950, 1980))
-years = list(np.arange(1954, 1958))
+years = [str(i) for i in range(1954,1961)]
 
 day = [
     '01', '02', '03',
@@ -64,15 +64,15 @@ def _sanity_check(arg):
                 file_probs.append('not all variables')
                 prob_encountered = True
             # Check number of levels
-            if ds.dims['lev'] != nlev:
+            if ds.sizes['lev'] != nlev:
                 file_probs.append('number of levels wrong')
                 prob_encountered = True
             # Check number of lats
-            if ds.dims['lat'] != nlat:
+            if ds.sizes['lat'] != nlat:
                 file_probs.append('number of lats wrong')
                 prob_encountered = True
             # Check number of lons
-            if ds.dims['lon'] != nlon:
+            if ds.sizes['lon'] != nlon:
                 file_probs.append('number of lons wrong')
                 prob_encountered = True
             # Check that file name date matches internal year
@@ -98,7 +98,7 @@ def _sanity_check(arg):
         except:
             return True, outFile, 'error'
 
-    return False, outFile,'good'
+    return True, outFile,'missing file'
 
 
 
