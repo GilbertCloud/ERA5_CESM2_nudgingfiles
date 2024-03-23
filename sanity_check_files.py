@@ -32,6 +32,7 @@ hoursec = 3600
 
 
 month = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+daysinmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 #month = ['10', '11', '12']
 
 DATA_VARS = set(['V', 'T', 'U', 'PS', 'Q'])
@@ -111,20 +112,33 @@ def main():
     #return
     bad_files = []
     for cyr in years:
+        # Check if leap year
+        leap = (int(cyr) % 4) == 0
+
         for cmonth in month:
             print("Checking: ", cyr, cmonth)
+
+            # Set max day in month
+            if cmonth == '02' and leap:
+                maxdayinmonth = 29
+            else:
+                maxdayinmonth = daysinmonth[int(cmonth)-1]
+
             for cday in day:
-                for ctime in time:
 
-                    #for bad_file in s:
-                    # bad, fn = _sanity_check((ctime, cday, cmonth, cyr))
-                    #cyr, cmonth, cday, ctime = bad_file.split(".")[-2].split("-")
-                    bad, fn, why = _sanity_check((ctime, cday, cmonth, cyr))
-                    #print(bad, fn)
+                # If day is less than or equal to max day in month, proceed with sanity check
+                if int(cday) <= maxdayinmonth:
+                    for ctime in time:
 
-                    if bad:
-                        bad_files.append((fn,why))
-                    #return
+                        #for bad_file in s:
+                        # bad, fn = _sanity_check((ctime, cday, cmonth, cyr))
+                        #cyr, cmonth, cday, ctime = bad_file.split(".")[-2].split("-")
+                        bad, fn, why = _sanity_check((ctime, cday, cmonth, cyr))
+                        #print(bad, fn)
+
+                        if bad:
+                            bad_files.append((fn,why))
+                        #return
 
 
     print("Bad files: ", bad_files)
