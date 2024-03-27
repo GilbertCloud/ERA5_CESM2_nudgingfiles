@@ -3,7 +3,7 @@ import numpy as np
 import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
-year = [str(i) for i in range(1954,1961)]
+year = [str(i) for i in range(1981,1991)]
 
 day = [
     '01', '02', '03',
@@ -34,6 +34,8 @@ timein = [
     12,
     18
 ]
+
+daysinmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 DATA_PATH = '/glade/derecho/scratch/glydia/inputdata/nudging/'
 SAVE_PATH = '/glade/campaign/univ/ucub0137/ERA5_CESM2_nudging'
@@ -116,13 +118,26 @@ def split_files(cyr,cmonth,cday):
 
 def main():
    for cyr in year:
+        # Check if leap year
+        leap = (int(cyr) % 4) == 0
+
         for cmonth in month:
+
+            # Set max day in month
+            if cmonth == '02' and leap:
+                maxdayinmonth = 29
+            else:
+                maxdayinmonth = daysinmonth[int(cmonth)-1]
+
+
             for cday in day:
-                try:
-                    split_files(cyr,cmonth,cday)
-                except Exception as e:
-                    print(e)
-                    print(f'Split failed for {cday} {cmonth} {cyr}')
+                # If day is less than or equal to max day in month, proceed with sanity check
+                if int(cday) <= maxdayinmonth:
+                    try:
+                        split_files(cyr,cmonth,cday)
+                    except Exception as e:
+                        print(e)
+                        print(f'Split failed for {cday} {cmonth} {cyr}')
 
 
 
