@@ -3,7 +3,7 @@ import numpy as np
 import xarray as xr
 from tqdm.contrib.concurrent import thread_map
 
-year = [str(i) for i in range(1981,1991)]
+year = [str(i) for i in range(1991,2001)]
 
 day = [
     '01', '02', '03',
@@ -131,7 +131,7 @@ def main():
 
 
             for cday in day:
-                # If day is less than or equal to max day in month, proceed with sanity check
+                # If day is less than or equal to max day in month, proceed with file split
                 if int(cday) <= maxdayinmonth:
                     try:
                         split_files(cyr,cmonth,cday)

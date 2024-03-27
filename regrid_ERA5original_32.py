@@ -11,7 +11,7 @@ variable = [
     'specific_humidity'
 ]
 
-year = ['1958'] 
+year = ['2010'] 
 
 day = [
     '01', '02', '03',
@@ -39,6 +39,8 @@ time = [
 ]
 
 month = [str(i).zfill(2) for i in range(1,13)]
+
+daysinmonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 var_aliases = {
     'u_component_of_wind':'131_u',
@@ -79,16 +81,28 @@ def interpolate_data(cvar, cday, cmonth, cyr):
 
 def main():
     for cyr in year:
+        # Check if leap year
+        leap = (int(cyr) % 4) == 0
+
         for cmonth in month:
+
+            # Set max day in month
+            if cmonth == '02' and leap:
+                maxdayinmonth = 29
+            else:
+                maxdayinmonth = daysinmonth[int(cmonth)-1]
+
             for cday in day:
-                for cvariable in variable:
-                    # Try to do download data, catch error if it fails
-                    try:
-                        print(f'Trying {cvariable} {cday} {cmonth} {cyr}')
-                        interpolate_data(cvariable, cday, cmonth, cyr)
-                    except Exception as e:
-                        print(e)
-                        print(f'Download failed for {cvariable} {cday} {cmonth} {cyr}')
+                # If day is less than or equal to max day in month, proceed with data download
+                if int(cday) <= maxdayinmonth:
+                    for cvariable in variable:
+                        # Try to do download data, catch error if it fails
+                        try:
+                            print(f'Trying {cvariable} {cday} {cmonth} {cyr}')
+                            interpolate_data(cvariable, cday, cmonth, cyr)
+                        except Exception as e:
+                            print(e)
+                            print(f'Download failed for {cvariable} {cday} {cmonth} {cyr}')
 
 if __name__ == '__main__':
    main()
