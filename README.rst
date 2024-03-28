@@ -43,10 +43,10 @@ Workflow for processing data
 
 Notes:
 ***********
-* 1 file containing 1 day's worth of data for 1 variable is 163 MB (after regridding in step 1)
+* 1 file containing 1 day's worth of data for 1 variable is 163 MB (after regridding in step 3)
 * 1 year's worth of data for all four variables (U,V,T,Q) is 0.26 TB
-* 1 file containing all four variables at a single timepoint is 28 MB (after splitting in step 2 - each day produces four of these)
-* 1 year's worth of data for all four variables after step 2 is 41 GB
+* 1 file containing all four variables at a single timepoint is 28 MB (after splitting in step 4 - each day produces four of these)
+* 1 year's worth of data for all four variables after step 4 is 41 GB
 
 ==============================
 Individual file descriptions
