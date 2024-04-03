@@ -104,6 +104,9 @@ def split_files(cyr,cmonth,cday):
             dstime = ds[index]
             dstime.compute()
 
+            dstime = dstime.expand_dims(dim='time')
+            dstime.compute()
+
             dstime.to_netcdf(outpath)
             dstime.close()
 
