@@ -89,9 +89,13 @@ def split_files(cyr,cmonth,cday):
         itime = timein[i]
         index = dict(time=itime)
 
+        # Set outdirectory and make it if it doesn't exist
+        outdir = os.path.join(SAVE_PATH,f'{cyr}{cmonth}/')
+        os.makedirs(outdir,exist_ok=True)
+
         # Set outfile path
         outfile = f'ERA5.6hour.32level.uvtq.{cyr}-{cmonth}-{cday}-{ctime}.nc'
-        outpath = os.path.join(SAVE_PATH,outfile)
+        outpath = os.path.join(outdir,outfile)
 
         try:
             # Check if exists

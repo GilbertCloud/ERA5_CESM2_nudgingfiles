@@ -47,7 +47,8 @@ def _sanity_check(arg):
     ctime, cday, cmonth, cyr = arg
 
     outFile = f"ERA5.6hour.32level.uvtq.{cyr}-{cmonth}-{cday}-{ctime}.nc"
-    fullPath = os.path.join(SAVE_PATH, outFile)
+    outDir = f"{cyr}{cmonth}/"
+    fullPath = os.path.join(SAVE_PATH, outDir, outFile)
 
     if os.path.isfile(fullPath):
         try:
